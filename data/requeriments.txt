@@ -1,0 +1,116 @@
+
+Especificações do Sistema - Aplicativo de Notas
+1. Autenticação do Usuário
+
+    Tela de login para entrada de e-mail e senha.
+    Opção de alternar entre exibir e ocultar a senha digitada.
+    Possibilidade de cadastro para novos usuários.
+    Se um usuário não tiver conta, será direcionado para uma tela vazia.
+
+2. Interface e Organização
+
+    Categorias padrão criadas automaticamente:
+        Random Thoughts (Pensamentos Aleatórios)
+        School (Escola)
+        Personal (Pessoal)
+    Tela principal exibe todas as categorias e permite a criação de novas notas.
+
+3. Funcionalidades de Notas
+
+    Criar nova nota ao clicar no botão correspondente.
+    Estrutura da nota:
+        Título
+        Conteúdo
+        Categoria (pode ser alterada pelo usuário)
+        Data da última edição (atualizada automaticamente)
+    Notas são salvas automaticamente ao serem criadas.
+    Notas são exibidas em formato de cartões de pré-visualização.
+
+4. Organização e Filtros
+
+    O usuário pode visualizar todas as notas ou filtrá-las por categoria.
+    Cada categoria tem uma cor associada, que muda a cor de fundo das notas nela incluídas.
+    As categorias listam o número de notas associadas a elas.
+
+5. Exibição das Notas
+
+    As notas são exibidas como cartões de pré-visualização contendo:
+        Data da última edição.
+        Nome da categoria.
+        Título da nota.
+        Trecho do conteúdo (caso o conteúdo ultrapasse o espaço do cartão, será truncado).
+    Datas exibidas como:
+        "Hoje" e "Ontem" para notas recentes.
+        Apenas mês e dia para notas mais antigas (sem exibição do ano).
+
+6. Edição de Notas
+
+    O usuário pode editar o título, conteúdo e categoria de uma nota.
+    A data da última edição é atualizada automaticamente ao editar uma nota.
+    A categoria pode ser alterada via menu suspenso (dropdown).
+
+7. Experiência do Usuário
+
+    Design organizado e estético.
+    Interface responsiva e intuitiva.
+    Notas sempre salvas automaticamente sem necessidade de confirmação manual.
+
+
+_____________________________________________________________________________
+
+
+System Specifications - Note-Taking App
+1. User Authentication
+
+    Login screen for entering email and password.
+    Option to toggle password visibility.
+    Sign-up option for new users.
+    If a user does not have an account, they are directed to an empty state.
+
+2. Interface and Organization
+
+    Automatically created default categories:
+        Random Thoughts
+        School
+        Personal
+    The main screen displays all categories and allows the creation of new notes.
+
+3. Note Features
+
+    Create a new note by clicking the corresponding button.
+    Note structure:
+        Title
+        Content
+        Category (can be changed by the user)
+        Last edited timestamp (automatically updated)
+    Notes are automatically saved upon creation.
+    Notes are displayed as preview cards.
+
+4. Organization and Filters
+
+    Users can view all notes or filter them by category.
+    Each category has an associated color, which changes the note's background color accordingly.
+    Categories display the number of notes associated with them.
+
+5. Note Display
+
+    Notes are displayed as preview cards, containing:
+        Last edited date.
+        Category name.
+        Note title.
+        A snippet of the content (if the content exceeds the card space, it is truncated).
+    Dates are displayed as follows:
+        "Today" and "Yesterday" for recent notes.
+        Only month and day for older notes (the year is not displayed).
+
+6. Editing Notes
+
+    Users can edit the title, content, and category of a note.
+    The last edited timestamp is automatically updated when a note is modified.
+    The category can be changed via a dropdown menu.
+
+7. User Experience
+
+    Organized and aesthetic design.
+    Responsive and intuitive interface.
+    Notes are always automatically saved without requiring manual confirmation.
