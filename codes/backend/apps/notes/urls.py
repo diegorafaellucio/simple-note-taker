@@ -1,8 +1,12 @@
 from django.urls import path
 from apps.notes.views.note_view import NoteView
 from apps.notes.views.category_view import CategoryView
+from apps.notes.views.auth_view import RegisterView
 
 urlpatterns = [
+    # Auth endpoints
+
+
     # Notes endpoints
     path('notes/', NoteView.as_view(), name='note-list-create'),
     path('notes/<int:pk>/', NoteView.as_view(), name='note-detail'),

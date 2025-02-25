@@ -16,12 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from apps.notes.views.token_obtain_view import TokenObtainView
+from apps.notes.views.auth_view import RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/authenticate/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/authenticate/register/', RegisterView.as_view(), name='register'),
+    path('api/authenticate/login/', TokenObtainView.as_view(), name='token_obtain_pair'),
     path('api/authenticate/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/authenticate/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
