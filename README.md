@@ -1,12 +1,63 @@
 # Simple Note Taker
 
-A modern web application for taking and organizing notes with a clean, user-friendly interface. Built following Domain-Driven Design (DDD) principles and clean architecture practices.
+A modern, full-stack note-taking application built with a focus on clean architecture, domain-driven design, and exceptional user experience. The application features a Django backend with DDD principles and a responsive Next.js frontend.
+
+## System Architecture
+
+The application is split into two main components:
+
+```
+codes/
+├── backend/     # Django + DRF backend
+└── frontend/    # Next.js frontend
+```
+
+## Frontend Architecture
+
+### Tech Stack
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: React Hooks
+- **Authentication**: JWT-based auth
+
+### Key Features
+
+1. **Modern UI/UX**
+   - Responsive design for all devices
+   - Real-time note saving with debouncing
+   - Category-based organization with color coding
+   - Smooth transitions and loading states
+
+2. **Architecture Patterns**
+   - Component-based architecture
+   - Custom hooks for shared logic
+   - Service layer for API communication
+   - Proper state management with React hooks
+
+3. **Security & Performance**
+   - JWT token management with auto-expiration
+   - Route protection
+   - Optimized re-rendering
+   - Lazy loading where appropriate
+
+### Frontend Structure
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── components/   # Reusable components
+│   │   ├── hooks/       # Custom React hooks
+│   │   ├── utils/       # Utility functions
+│   │   └── notes/       # Note feature pages
+│   └── styles/          # Global styles
+```
 
 ## Architecture Overview
 
 The project follows a modern full-stack architecture with a strong emphasis on domain-driven design and clean architecture:
 
-### Backend Architecture (Django + DRF)
+## Backend Architecture (Django + DRF)
 
 #### Domain Layer
 The core business logic is encapsulated in the domain layer:
@@ -111,8 +162,16 @@ backend/
 
 ## Development Setup
 
-### Backend
+### Prerequisites
+- Python 3.8+
+- Node.js 18+
+- npm or yarn
+
+### Backend Setup
 ```bash
+# Navigate to backend directory
+cd codes/backend
+
 # Create virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -126,6 +185,26 @@ python manage.py migrate
 # Start development server
 python manage.py runserver
 ```
+
+### Frontend Setup
+```bash
+# Navigate to frontend directory
+cd codes/frontend
+
+# Install dependencies
+npm install
+# or
+yarn install
+
+# Start development server
+npm run dev
+# or
+yarn dev
+```
+
+### Access the Application
+- Backend API: http://localhost:8000
+- Frontend: http://localhost:3000
 
 ## Git Configuration
 
