@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import "@fontsource/inria-serif";
+import { useTokenExpiration } from "../../hooks/useTokenExpiration";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useAuth } from "../../hooks/useAuth";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
+import { Button } from "../../components/ui/Button";
+import { CategorySelect } from "../../components/ui/CategorySelect";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,12 +24,27 @@ const applyOpacity = (hex, opacity) => {
 export default function NewNotePage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    useTokenExpiration();
+    const { userId } = useAuth();
     const noteId = searchParams.get("id");
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [title, setTitle] = useState("Note Title");
     const [content, setContent] = useState("");
     const [error, setError] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+    const debouncedTitle = useDebounce(title, 1000);
+    const debouncedContent = useDebounce(content, 1000);
+
+    // Auto-save effect when debounced values change
+    useEffect(() => {
+        if (noteId && (debouncedTitle !== "Note Title" || debouncedContent !== "")) {
+            handleUpdateNote();
+        }
+    }, [debouncedTitle, debouncedContent, selectedCategory]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -32,57 +53,85 @@ export default function NewNotePage() {
             return;
         }
 
-        // Fetch categories
-        fetch(`${API_URL}/api/categories/`, {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (Array.isArray(data)) {
-                    setCategories(data);
-                    setSelectedCategory(data[0]?.id || null);
-                } else {
-                    setCategories([]);
-                }
-            })
-            .catch(() => setCategories([]));
+        const fetchData = async () => {
+            setIsLoading(true);
+            setError("");
+            
+            try {
+                // Fetch categories
+                const categoriesResponse = await fetch(`${API_URL}/api/categories/`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-        // Fetch note details if editing
-        if (noteId) {
-            fetch(`${API_URL}/api/notes/${noteId}/`, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-                .then((response) => response.json())
-                .then((note) => {
-                    setTitle(note.title);
-                    setContent(note.content);
-                    setSelectedCategory(note.category);
-                })
-                .catch(() => setError("Failed to fetch note details"));
-        }
+                if (!categoriesResponse.ok) {
+                    throw new Error('Failed to fetch categories');
+                }
+
+                const categoriesData = await categoriesResponse.json();
+                if (Array.isArray(categoriesData)) {
+                    setCategories(categoriesData);
+                    setSelectedCategory(categoriesData[0]?.id || null);
+                }
+
+                // Fetch note details if editing
+                if (noteId) {
+                    const noteResponse = await fetch(`${API_URL}/api/notes/${noteId}/`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    if (!noteResponse.ok) {
+                        throw new Error('Failed to fetch note details');
+                    }
+
+                    const noteData = await noteResponse.json();
+                    setTitle(noteData.title);
+                    setContent(noteData.content);
+                    setSelectedCategory(noteData.category);
+                }
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
     }, [router, noteId]);
 
     // Function to update note
-    const handleUpdateNote = async (field, value) => {
+    const handleUpdateNote = async () => {
         if (!noteId) return;
+        setIsSaving(true);
         const token = localStorage.getItem("token");
-        const updatedNote = {
-            id: noteId,
-            title: field === "title" ? value : title,
-            content: field === "content" ? value : content,
-            last_edited: new Date().toISOString(),
-            user: 1,
-            category: selectedCategory,
-        };
+        try {
+            const updatedNote = {
+                id: noteId,
+                title,
+                content,
+                last_edited: new Date().toISOString(),
+                user: userId,
+                category: selectedCategory,
+            };
 
-        await fetch(`${API_URL}/api/notes/${noteId}/`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(updatedNote),
-        });
+            const response = await fetch(`${API_URL}/api/notes/${noteId}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(updatedNote),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save note');
+            }
+
+            setLastSaved(new Date());
+        } catch (err) {
+            setError('Failed to save changes. Please try again.');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Get selected category color for styling
@@ -90,30 +139,36 @@ export default function NewNotePage() {
         categories.find((cat) => cat.id === selectedCategory)?.color || "#F5F5F5";
     const backgroundWithOpacity = applyOpacity(selectedCategoryColor, 0.5);
 
+    if (isLoading) {
+        return (
+            <div className="h-screen w-screen bg-background flex items-center justify-center">
+                <LoadingSpinner size="lg" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="h-screen w-screen bg-background flex flex-col items-center justify-center p-8 gap-4">
+                <p className="text-red-500">{error}</p>
+                <Button onClick={() => router.push('/notes')}>Return to Notes</Button>
+            </div>
+        );
+    }
+
     return (
         <div className="h-screen w-screen bg-background flex flex-col p-8">
             {/* Header */}
             <div className="w-full flex justify-between items-center p-4">
-                <select
-                    className="border rounded-lg px-4 py-2 text-lg"
-                    style={{ backgroundColor: "#FAF1E3", borderColor: "#957139" }}
-                    value={selectedCategory}
-                    onChange={(e) => {
-                        setSelectedCategory(Number(e.target.value));
-                        handleUpdateNote("category", Number(e.target.value));
-                    }}
-                >
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id} style={{ display: "flex", alignItems: "center" }}>
-                            <span style={{ backgroundColor: category.color, borderRadius: "50%", width: "10px", height: "10px", display: "inline-block", marginRight: "8px" }}></span>
-                            {category.name.replace("_", " ")}
-                        </option>
-                    ))}
-                </select>
+                <CategorySelect
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onSelect={setSelectedCategory}
+                />
 
                 {/* Close Button - Redirects to Notes Page */}
                 <button
-                    className="text-xl"
+                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                     onClick={async () => {
                         if (!title.trim() && !content.trim()) {
                             const token = localStorage.getItem("token");
@@ -121,11 +176,16 @@ export default function NewNotePage() {
                                 method: "DELETE",
                                 headers: { Authorization: `Bearer ${token}` },
                             });
+                        } else {
+                            // Final save before closing
+                            await handleUpdateNote();
                         }
                         router.push("/notes");
                     }}
                 >
-                    ✕
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
@@ -138,17 +198,28 @@ export default function NewNotePage() {
                     boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.25)",
                 }}
             >
-                <p className="absolute top-4 right-4 text-sm text-gray-600">
-                    Last Edited: {new Date().toLocaleString()}
-                </p>
+                <div className="absolute top-4 right-4 text-sm text-gray-600 flex items-center gap-4">
+                    {isSaving && (
+                        <span className="flex items-center gap-2">
+                            <svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>Saving...</span>
+                        </span>
+                    )}
+                    {lastSaved && (
+                        <span className="text-xs text-gray-500">
+                            Last edited: {lastSaved.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} at {lastSaved.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                    )}
+                </div>
                 <input
                     type="text"
                     value={title}
-                    onChange={(e) => {
-                        setTitle(e.target.value);
-                        handleUpdateNote("title", e.target.value);
-                    }}
-                    className="w-full p-3 text-xl font-bold focus:outline-none"
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Note Title"
+                    className="w-full p-3 text-xl font-bold focus:outline-none transition-colors"
                     style={{
                         backgroundColor: "transparent",
                         border: "none",
@@ -161,11 +232,9 @@ export default function NewNotePage() {
 
                 <textarea
                     value={content}
-                    onChange={(e) => {
-                        setContent(e.target.value);
-                        handleUpdateNote("content", e.target.value);
-                    }}
-                    className="w-full h-40 p-3 text-lg focus:outline-none"
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Start typing your note..."
+                    className="w-full h-[calc(100vh-300px)] p-3 text-lg focus:outline-none resize-none transition-colors"
                     style={{
                         backgroundColor: "transparent",
                         border: "none",

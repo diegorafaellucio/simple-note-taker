@@ -1,5 +1,3 @@
-// src/components/NoteCard.tsx
-
 "use client";
 
 import React from "react";
@@ -20,13 +18,8 @@ interface NoteCardProps {
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note, category }) => {
-    const router = useRouter(); // Hook para navegação
+    const router = useRouter();
 
-    // Definir cor da categoria com fallback
-    const categoryColor = category?.color || "#F5F5F5";
-    const backgroundColor = `rgba(${parseInt(categoryColor.slice(1, 3), 16)}, ${parseInt(categoryColor.slice(3, 5), 16)}, ${parseInt(categoryColor.slice(5, 7), 16)}, 0.5)`;
-
-    // Função para formatar a data corretamente
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         const today = new Date();
@@ -34,31 +27,37 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, category }) => {
         yesterday.setDate(yesterday.getDate() - 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return "Hoje";
+            return "today";
         } else if (date.toDateString() === yesterday.toDateString()) {
-            return "Ontem";
+            return "yesterday";
         } else {
-            return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+            return `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
         }
     };
 
+    const categoryName = category?.name.replace("_", " ") || "Uncategorized";
+    const categoryColor = category?.color || "#F5F5F5";
+    const backgroundColor = `rgba(${parseInt(categoryColor.slice(1, 3), 16)}, ${parseInt(categoryColor.slice(3, 5), 16)}, ${parseInt(categoryColor.slice(5, 7), 16)}, 0.2)`;
+
     return (
         <div
-            key={note.id}
-            onClick={() => router.push(`/notes/new?id=${note.id}`)} // Redirecionamento ao clicar
-            className="p-4 rounded-lg shadow-md border-2 w-[303px] h-[246px] flex flex-col justify-between cursor-pointer transition-transform hover:scale-105"
-            style={{ backgroundColor, borderColor: categoryColor }}
+            onClick={() => router.push(`/notes/new?id=${note.id}`)}
+            className="p-6 rounded-lg cursor-pointer transition-transform hover:scale-[1.02] min-h-[200px] flex flex-col border-2"
+            style={{ 
+                backgroundColor,
+                borderColor: categoryColor
+            }}
         >
-            {/* Data e Categoria */}
-            <p className="font-bold text-sm">
-                {formatDate(note.last_edited)} <span className="font-normal">{category?.name.replace("_", " ") || "Sem Categoria"}</span>
+            <div className="flex items-start mb-2 text-sm text-gray-600 gap-2">
+                <span className="font-bold">{formatDate(note.last_edited)}</span>
+                <span className="capitalize">{categoryName}</span>
+            </div>
+            
+            <h3 className="text-2xl font-serif mb-3 font-bold">{note.title}</h3>
+            
+            <p className="text-gray-700 line-clamp-4 flex-grow">
+                {note.content}
             </p>
-
-            {/* Título da Nota */}
-            <h4 className="font-bold text-lg truncate">{note.title}</h4>
-
-            {/* Trecho do conteúdo */}
-            <p className="text-sm line-clamp-3">{note.content}</p>
         </div>
     );
 };

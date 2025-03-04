@@ -1,4 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Simple Note Taker - Frontend
+
+A modern, responsive note-taking application built with Next.js and TypeScript. This frontend provides an intuitive interface for creating, organizing, and managing notes with category-based organization.
+
+## Architecture & Technical Decisions
+
+### Tech Stack
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: React Hooks
+- **Authentication**: JWT-based auth
+
+### Project Structure
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── ui/          # Reusable UI components
+│   │   └── ...         # Feature-specific components
+│   ├── hooks/          # Custom React hooks
+│   ├── utils/          # Utility functions
+│   ├── notes/          # Notes feature pages
+│   └── ...            # Other feature pages
+```
+
+### Key Features & Implementation
+
+1. **Component Architecture**
+   - Modular, reusable components following SOLID principles
+   - Separation of concerns between UI components and business logic
+   - Custom hooks for shared functionality
+
+2. **Authentication**
+   - JWT-based authentication with automatic token expiration handling
+   - Secure route protection
+   - Automatic redirect to login on token expiration
+
+3. **Note Management**
+   - Real-time note saving with debounced updates
+   - Category-based organization with color coding
+   - Responsive grid layout for note cards
+
+4. **User Experience**
+   - Clean, intuitive interface with consistent styling
+   - Immediate feedback on user actions
+   - Smooth transitions and loading states
+
+### Design Patterns & Best Practices
+
+1. **State Management**
+   - Local state with React hooks for component-level state
+   - Custom hooks for shared state logic
+   - Proper state initialization and cleanup
+
+2. **Error Handling**
+   - Comprehensive error boundaries
+   - User-friendly error messages
+   - Graceful fallbacks
+
+3. **Performance Optimization**
+   - Debounced API calls
+   - Efficient re-rendering with proper dependency management
+   - Lazy loading of components when appropriate
 
 ## Getting Started
 

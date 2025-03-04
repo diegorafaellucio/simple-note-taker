@@ -1,0 +1,427 @@
+{
+	"info": {
+		"_postman_id": "86a2a17c-26bc-439d-85f5-775c43cb9ed8",
+		"name": "simple-note-taker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6706300"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"diegorafaellucio@gmail.com\",\n    \"password\": \" 7driWejm@@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/authenticate/login/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"authenticate",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"diego\",\n    \"password\": \" 7driWejm@@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/authenticate/register/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"authenticate",
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTk2NzIyOSwiaWF0IjoxNzM5ODgwODI5LCJqdGkiOiI2ODJiY2E5YjA1NGU0NzAzOTlkOTQwMTRkMGIwYTA2NyIsInVzZXJfaWQiOjF9.L8uk5KAl2XBQk93ZdQtuVvZ0sjZf-1Xfc_DB5G8E_U0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/authenticate/refresh/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"authenticate",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTE4NDkyLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6IjVhYTgxZjE2NzgyYzRhNDg5YTU0NzgyYzVkYTc1NTVjIiwidXNlcl9pZCI6MX0.FgfsjDZWJQQNWdShQl845e7dve-2iGAONpXP4hFdXwU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/authenticate/verify/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"authenticate",
+								"verify",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Note",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwNDUyNTkzLCJpYXQiOjE3NDA0NDg5OTMsImp0aSI6ImNlM2Q2Mjg5OWE5MDQ3ZjQ4YThmNjljYjgyYzFhNWJhIiwidXNlcl9pZCI6M30.mvPkOYdAdIlY-7Mgw6T5-b4J4teKG9pyJSkolPKjnwc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"string\",\n  \"content\": \"string\",\n  \"user\": 3,\n  \"category\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTE5NTIxLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6ImQxZTNmOWQ4YjYwNzQ0YjdhYTM4NjU5OTNmZTVhYzFiIiwidXNlcl9pZCI6MX0.-ZMaBDKpgLkaY-VyIm1tpHuNwwN95X01Tg25NeANCj0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_by_category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTE5NTIxLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6ImQxZTNmOWQ4YjYwNzQ0YjdhYTM4NjU5OTNmZTVhYzFiIiwidXNlcl9pZCI6MX0.-ZMaBDKpgLkaY-VyIm1tpHuNwwN95X01Tg25NeANCj0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/?category=2",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								""
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_by_id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTE5NTIxLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6ImQxZTNmOWQ4YjYwNzQ0YjdhYTM4NjU5OTNmZTVhYzFiIiwidXNlcl9pZCI6MX0.-ZMaBDKpgLkaY-VyIm1tpHuNwwN95X01Tg25NeANCj0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTIyNDcwLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6ImY5MTlkYmIxOWVhYTRjNmRhN2ZkN2UwY2U2NTkyN2I1IiwidXNlcl9pZCI6MX0.3iK-RQLCYK5mJz98yK93E1zRaOSGyEzfRpCWbYEbon4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": 16,\n    \"title\": \"string\",\n    \"content\": \"string 3333\",\n    \"last_edited\": \"2025-02-21T06:27:38.170706Z\",\n    \"user\": 1,\n    \"category\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/16/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"16",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTIyOTE5LCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6IjNhZmI3MDcyYzQ0OTQ0NDlhZTQ1MTc5NjYwNGU5MGZkIiwidXNlcl9pZCI6MX0.slJWhmzpgUay1RM6kNvlZIhKM4X9ZVI2Tk7SgRuShlI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": 16,\n    \"title\": \"string\",\n    \"content\": \"string 3333\",\n    \"last_edited\": \"2025-02-21T06:27:38.170706Z\",\n    \"user\": 1,\n    \"category\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/16/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								"16",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "get_all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMTE5NTIxLCJpYXQiOjE3NDAxMTgxNTQsImp0aSI6ImQxZTNmOWQ4YjYwNzQ0YjdhYTM4NjU5OTNmZTVhYzFiIiwidXNlcl9pZCI6MX0.-ZMaBDKpgLkaY-VyIm1tpHuNwwN95X01Tg25NeANCj0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/notes/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
