@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import "@fontsource/inria-serif";
 import { useTokenExpiration } from "../../hooks/useTokenExpiration";
@@ -36,6 +36,46 @@ export default function NewNotePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+    // Function to update note
+    const handleUpdateNote = useCallback(async () => {
+        if (!noteId) return;
+        setIsSaving(true);
+        const token = localStorage.getItem("token");
+        try {
+            const updatedNote = {
+                id: noteId,
+                title,
+                content,
+                last_edited: new Date().toISOString(),
+                user: userId,
+                category: selectedCategory,
+            };
+
+            const timestamp = new Date().getTime();
+            const response = await fetch(`${API_URL}/api/notes/${noteId}/?t=${timestamp}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedNote),
+            });
+            
+            // Verify the update was successful
+            const updatedData = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Failed to save note');
+            }
+
+            setLastSaved(new Date());
+        } catch (err) {
+            setError('Failed to save changes. Please try again.');
+        } finally {
+            setIsSaving(false);
+        }
+    }, [noteId, title, content, userId, selectedCategory]);
+
     const debouncedTitle = useDebounce(title, 1000);
     const debouncedContent = useDebounce(content, 1000);
 
@@ -44,7 +84,7 @@ export default function NewNotePage() {
         if (noteId && (debouncedTitle !== "Note Title" || debouncedContent !== "")) {
             handleUpdateNote();
         }
-    }, [debouncedTitle, debouncedContent, selectedCategory]);
+    }, [debouncedTitle, debouncedContent, selectedCategory, noteId, handleUpdateNote]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -75,8 +115,11 @@ export default function NewNotePage() {
 
                 // Fetch note details if editing
                 if (noteId) {
-                    const noteResponse = await fetch(`${API_URL}/api/notes/${noteId}/`, {
-                        headers: { Authorization: `Bearer ${token}` },
+                    const timestamp = new Date().getTime();
+                    const noteResponse = await fetch(`${API_URL}/api/notes/${noteId}/?t=${timestamp}`, {
+                        headers: { 
+                            Authorization: `Bearer ${token}`
+                        },
                     });
 
                     if (!noteResponse.ok) {
@@ -97,42 +140,6 @@ export default function NewNotePage() {
 
         fetchData();
     }, [router, noteId]);
-
-    // Function to update note
-    const handleUpdateNote = async () => {
-        if (!noteId) return;
-        setIsSaving(true);
-        const token = localStorage.getItem("token");
-        try {
-            const updatedNote = {
-                id: noteId,
-                title,
-                content,
-                last_edited: new Date().toISOString(),
-                user: userId,
-                category: selectedCategory,
-            };
-
-            const response = await fetch(`${API_URL}/api/notes/${noteId}/`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(updatedNote),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to save note');
-            }
-
-            setLastSaved(new Date());
-        } catch (err) {
-            setError('Failed to save changes. Please try again.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
 
     // Get selected category color for styling
     const selectedCategoryColor =
@@ -170,17 +177,25 @@ export default function NewNotePage() {
                 <button
                     className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                     onClick={async () => {
-                        if (!title.trim() && !content.trim()) {
-                            const token = localStorage.getItem("token");
-                            await fetch(`${API_URL}/api/notes/${noteId}/`, {
-                                method: "DELETE",
-                                headers: { Authorization: `Bearer ${token}` },
-                            });
-                        } else {
-                            // Final save before closing
-                            await handleUpdateNote();
+                        try {
+                            if (!title.trim() && !content.trim()) {
+                                const token = localStorage.getItem("token");
+                                await fetch(`${API_URL}/api/notes/${noteId}/`, {
+                                    method: "DELETE",
+                                    headers: { Authorization: `Bearer ${token}` },
+                                });
+                            } else {
+                                // Final save before closing
+                                await handleUpdateNote();
+                                // Wait for the save to complete
+                                await new Promise(resolve => setTimeout(resolve, 500));
+                            }
+                            // Force a refresh and cache revalidation
+                            await router.refresh();
+                            router.push("/notes");
+                        } catch (err) {
+                            setError('Failed to save changes. Please try again.');
                         }
-                        router.push("/notes");
                     }}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -191,14 +206,14 @@ export default function NewNotePage() {
 
             {/* Note Entry Section */}
             <div
-                className="flex-1 mx-6 p-6 rounded-xl border-2 shadow-md relative"
+                className="flex-1 mx-6 p-6 rounded-xl border-2 shadow-md relative font-['Arial'] font-normal"
                 style={{
                     backgroundColor: backgroundWithOpacity,
                     borderColor: selectedCategoryColor,
                     boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.25)",
                 }}
             >
-                <div className="absolute top-4 right-4 text-sm text-gray-600 flex items-center gap-4">
+                <div className="absolute top-4 right-4 text-sm text-black flex items-center gap-4">
                     {isSaving && (
                         <span className="flex items-center gap-2">
                             <svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -223,9 +238,9 @@ export default function NewNotePage() {
                     style={{
                         backgroundColor: "transparent",
                         border: "none",
-                        fontFamily: "'Inria Serif', serif",
-                        fontSize: "24px",
-                        fontWeight: "700",
+                        fontFamily: "serif",
+                        fontSize: "40px",
+                        fontWeight: "bold",
                         color: "#000000",
                     }}
                 />
@@ -238,9 +253,9 @@ export default function NewNotePage() {
                     style={{
                         backgroundColor: "transparent",
                         border: "none",
-                        fontFamily: "'Inria Serif', serif",
-                        fontSize: "24px",
-                        fontWeight: "700",
+                        fontFamily: "Arial",
+                        fontSize: "18px",
+                        fontWeight: "normal",
                         color: "#000000",
                     }}
                 />

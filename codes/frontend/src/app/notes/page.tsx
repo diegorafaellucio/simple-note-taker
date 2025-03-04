@@ -51,7 +51,7 @@ export default function NotesPage() {
                 // Fetch note counts for each category
                 const counts = {};
                 await Promise.all(data.map(async (category) => {
-                    const notesResponse = await fetch(`${API_URL}/api/notes/?category=${category.id}`, {
+                    const notesResponse = await fetch(`${API_URL}/api/notes/?category=${category.id}&user=${userId}`, {
                         headers: { Authorization: `Bearer ${token}` },
                     });
                     if (notesResponse.ok) {
@@ -70,7 +70,7 @@ export default function NotesPage() {
         };
 
         fetchData();
-    }, [router]);
+    }, [router, userId]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -82,8 +82,8 @@ export default function NotesPage() {
 
             try {
                 const endpoint = selectedCategory === null
-                    ? `${API_URL}/api/notes/`
-                    : `${API_URL}/api/notes/?category=${selectedCategory}`;
+                    ? `${API_URL}/api/notes/?user=${userId}`
+                    : `${API_URL}/api/notes/?category=${selectedCategory}&user=${userId}`;
 
                 const response = await fetch(endpoint, { 
                     headers: { Authorization: `Bearer ${token}` } 
@@ -104,7 +104,7 @@ export default function NotesPage() {
         };
 
         fetchNotes();
-    }, [selectedCategory]);
+    }, [selectedCategory, userId]);
 
     if (error) {
         return (
@@ -177,7 +177,7 @@ export default function NotesPage() {
                                     ></span>
                                     <span className="capitalize">{category.name.replace("_", " ")}</span>
                                 </div>
-                                <span className="text-gray-600">{categoryNotesCount[category.id] || 0}</span>
+                                <span className="text-black">{categoryNotesCount[category.id] || 0}</span>
                             </div>
                         ))
                     ) : (
@@ -188,12 +188,13 @@ export default function NotesPage() {
                 {/* Notes Grid */}
                 <div className="w-[88%] flex flex-col items-center">
                     {notes.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                        <div className="grid grid-cols-3 gap-6 w-full">
                             {notes.map((note) => {
                                 const category = categories.find((cat) => cat.id === note.category);
+                                // Add last_edited to key to force remount when note is updated
                                 return (
                                     <NoteCard
-                                        key={note.id}
+                                        key={`${note.id}-${note.last_edited}`}
                                         note={note}
                                         category={category}
                                     />

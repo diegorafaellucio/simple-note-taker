@@ -42,20 +42,22 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, category }) => {
     return (
         <div
             onClick={() => router.push(`/notes/new?id=${note.id}`)}
-            className="p-6 rounded-lg cursor-pointer transition-transform hover:scale-[1.02] min-h-[200px] flex flex-col border-2"
+            className="p-6 rounded-lg cursor-pointer transition-transform hover:scale-[1.02] flex flex-col border-2"
             style={{ 
+                width: '303px',
+                height: '246px',
                 backgroundColor,
                 borderColor: categoryColor
             }}
         >
-            <div className="flex items-start mb-2 text-sm text-gray-600 gap-2">
+            <div className="flex items-start mb-2 text-sm text-black gap-2">
                 <span className="font-bold">{formatDate(note.last_edited)}</span>
                 <span className="capitalize">{categoryName}</span>
             </div>
             
             <h3 className="text-2xl font-serif mb-3 font-bold">{note.title}</h3>
             
-            <p className="text-gray-700 line-clamp-4 flex-grow">
+            <p className="text-black line-clamp-4 flex-grow">
                 {note.content}
             </p>
         </div>

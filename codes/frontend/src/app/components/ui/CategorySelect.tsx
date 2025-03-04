@@ -43,7 +43,7 @@ export function CategorySelect({ categories, selectedCategory, onSelect }: Categ
                             value={category.id}
                             className={({ active }) =>
                                 `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                                    active ? 'bg-gray-100' : 'text-gray-900'
+                                    active ? 'bg-gray-100' : 'text-black'
                                 }`
                             }
                         >
