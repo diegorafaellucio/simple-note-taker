@@ -5,31 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc34fa2a-cbe2-478a-bf1b-a29a156acd2a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../backend/apps/notes/managers/custom_user_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/apps/notes/models/custom_user_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../backend/requeriments.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/bubble-tea.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/cactus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/cute-cat.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/components/AuthHeader.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/components/SessionProvider.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/notes/new/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/notes/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/notes/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/notes/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/models/note_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/notes/models/note_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/apps/notes/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/notes/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/core/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/core/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/apps/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/NoteCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/NoteCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/notes/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/notes/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,30 +34,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.Next.js Dev.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/diegolucio/Projects/GeneralProjects/simple-note-taker/codes/frontend/src/app/notes/new",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "ts.external.directory.path": "/Applications/Jetbrains/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.Next.js Dev.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/diegolucio/Projects/GeneralProjects/simple-note-taker/codes/frontend/src/app/components&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/Jetbrains/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app/components" />
       <recent name="$PROJECT_DIR$/src/app/notes/new" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/src/app" />
       <recent name="$PROJECT_DIR$/src/app/signup" />
-      <recent name="$PROJECT_DIR$/styles" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/styles" />
@@ -93,13 +73,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-WS-243.24978.60" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -110,7 +83,8 @@
       <updated>1740123727433</updated>
       <workItem from="1740123728776" duration="15000" />
       <workItem from="1740123748111" duration="6910000" />
-      <workItem from="1740355115180" duration="29427000" />
+      <workItem from="1740355115180" duration="35277000" />
+      <workItem from="1741028024812" duration="1000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from apps.notes.managers.custom_user_manager import CustomUserManager
+from apps.notes.domain.models import User
 
 
 class CustomModelUser(AbstractBaseUser, PermissionsMixin):
@@ -20,12 +21,19 @@ class CustomModelUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def get_user_status(self):
-        # Good place to add a breakpoint for debugging
-        status = {
-            'email': self.email,
-            'is_active': self.is_active,
-            'is_staff': self.is_staff,
-            'is_superuser': self.is_superuser
-        }
-        return status
+    def to_domain(self) -> User:
+        return User(
+            id=self.id,
+            email=self.email,
+            is_active=self.is_active,
+            is_staff=self.is_staff
+        )
+
+    @classmethod
+    def from_domain(cls, user: User) -> 'CustomModelUser':
+        return cls(
+            id=user.id,
+            email=user.email,
+            is_active=user.is_active,
+            is_staff=user.is_staff
+        )

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL; // API URL from .env
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function NotesPage() {
     const router = useRouter();
@@ -16,15 +16,12 @@ export default function NotesPage() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            router.push("/login"); // Redirect if not authenticated
+            router.push("/login");
             return;
         }
 
-        // Fetch categories with Bearer token
         fetch(`${API_URL}/api/categories/`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(async (response) => {
                 if (!response.ok) {
@@ -40,12 +37,7 @@ export default function NotesPage() {
                         fetch(`${API_URL}/api/notes/?category=${category.id}`, {
                             headers: { Authorization: `Bearer ${token}` },
                         })
-                            .then(async (response) => {
-                                if (!response.ok) {
-                                    throw new Error(`HTTP Error ${response.status}: ${await response.text()}`);
-                                }
-                                return response.json();
-                            })
+                            .then((response) => response.json())
                             .then((notesData) => {
                                 counts[category.id] = notesData.length || 0;
                             });
@@ -59,19 +51,16 @@ export default function NotesPage() {
     }, [router]);
 
     useEffect(() => {
-        if (selectedCategory === null) {
-            fetch(`${API_URL}/api/notes/`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            })
-                .then((response) => response.json())
-                .then(setNotes);
-        } else {
-            fetch(`${API_URL}/api/notes/?category=${selectedCategory}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            })
-                .then((response) => response.json())
-                .then(setNotes);
-        }
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const endpoint = selectedCategory === null
+            ? `${API_URL}/api/notes/`
+            : `${API_URL}/api/notes/?category=${selectedCategory}`;
+
+        fetch(endpoint, { headers: { Authorization: `Bearer ${token}` } })
+            .then((response) => response.json())
+            .then(setNotes);
     }, [selectedCategory]);
 
     return (
@@ -115,7 +104,7 @@ export default function NotesPage() {
                     >
                         All Categories
                     </h3>
-                    {Array.isArray(categories) && categories.length > 0 ? (
+                    {categories.length > 0 ? (
                         categories.map((category) => (
                             <div
                                 key={category.id}
@@ -125,7 +114,10 @@ export default function NotesPage() {
                                 onClick={() => setSelectedCategory(category.id)}
                             >
                                 <div className="flex items-center">
-                                    <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: category.color }}></span>
+                                    <span
+                                        className="w-3 h-3 rounded-full mr-2"
+                                        style={{ backgroundColor: category.color }}
+                                    ></span>
                                     {category.name.replace("_", " ")}
                                 </div>
                                 <span className="text-gray-600">{categoryNotesCount[category.id] || 0}</span>
@@ -136,19 +128,25 @@ export default function NotesPage() {
                     )}
                 </div>
 
-                {/* Main Content */}
+                {/* Notes Grid */}
                 <div className="w-[88%] flex flex-col items-center">
                     {notes.length > 0 ? (
                         <div className="grid grid-cols-3 gap-4 w-full">
                             {notes.map((note) => {
-                                const categoryColor = categories.find(cat => cat.id === note.category)?.color || "#F5F5F5";
+                                const category = categories.find((cat) => cat.id === note.category);
+                                const categoryColor = category?.color || "#F5F5F5";
+                                const backgroundColor = `rgba(${parseInt(categoryColor.slice(1, 3), 16)}, ${parseInt(categoryColor.slice(3, 5), 16)}, ${parseInt(categoryColor.slice(5, 7), 16)}, 0.5)`;
+
                                 return (
                                     <div
                                         key={note.id}
-                                        className="p-4 rounded-lg shadow-md border-2 w-[303px] h-[246px]"
-                                        style={{ backgroundColor: `rgba(${parseInt(categoryColor.slice(1), 16) >> 16}, ${parseInt(categoryColor.slice(1), 16) >> 8 & 255}, ${parseInt(categoryColor.slice(1), 16) & 255}, 0.5)`, borderColor: categoryColor }}
+                                        className="p-4 rounded-lg shadow-md border-2 w-[303px] h-[246px] flex flex-col justify-between"
+                                        style={{ backgroundColor, borderColor: categoryColor }}
                                     >
-                                        <h4 className="font-bold">{note.title}</h4>
+                                        <p className="font-bold text-sm">
+                                            {new Date(note.last_edited).toLocaleDateString()} {category?.name.replace("_", " ")}
+                                        </p>
+                                        <h4 className="font-bold text-lg">{note.title}</h4>
                                         <p className="text-sm">{note.content}</p>
                                     </div>
                                 );
